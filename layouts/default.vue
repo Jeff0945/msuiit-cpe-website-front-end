@@ -5,7 +5,7 @@
       <div class="flex lg:flex-1">
         <a href="#" class="-m-1.5 p-1.5">
           <span class="sr-only">{{ title }}</span>
-          <img class="h-11 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="" />
+          <img class="h-16 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="" />
         </a>
       </div>
       <div class="flex lg:hidden">
@@ -15,12 +15,10 @@
         </button>
       </div>
       <PopoverGroup class="hidden lg:flex lg:gap-x-12">
-        <NuxtLink to="/" class="text-sm font-semibold leading-6 text-gray-900">Home</NuxtLink>
-        <NuxtLink to="/merch" class="text-sm font-semibold leading-6 text-gray-900">Merch</NuxtLink>
-        <NuxtLink to="/company" class="text-sm font-semibold leading-6 text-gray-900">About Us</NuxtLink>
+        <NuxtLink v-for="link in links" :to="link.link" class="text-lg font-semibold leading-6 text-gray-900">{{ link.name }}</NuxtLink>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        <NuxtLink to="/login" class="text-lg font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></NuxtLink>
       </div>
     </nav>
     <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
@@ -39,12 +37,10 @@
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-              <NuxtLink to="/" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Home</NuxtLink>
-              <NuxtLink to="/merch" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Merch</NuxtLink>
-              <NuxtLink to="/company" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">About Us</NuxtLink>
+              <NuxtLink @click="mobileMenuOpen = false" v-for="link in links" :to="link.link" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ link.name }}</NuxtLink>
             </div>
             <div class="py-6">
-              <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+              <NuxtLink @click="mobileMenuOpen = false" to="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</NuxtLink>
             </div>
           </div>
         </div>
@@ -56,13 +52,29 @@
 
 <style>
 .router-link-active {
-  color: #24356e;
+  color: #3b537a;
 }
 </style>
 
 <script setup>
 import { ref } from 'vue'
-import { DialogPanel, PopoverGroup } from "@headlessui/vue";
+import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/vue";
+import { Bars3Icon, XMarkIcon } from "@heroicons/vue/20/solid/index.js";
+
+const links = [
+  {
+    link: '/',
+    name: 'Home'
+  },
+  {
+    link: '/merch',
+    name: 'Merch'
+  },
+  {
+    link: '/about-us',
+    name: 'About Us'
+  },
+]
 
 const mobileMenuOpen = ref(false)
 
