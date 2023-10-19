@@ -9,8 +9,21 @@ export default {
     "./error.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
+        'cpe-indigo': '#101320',
+        'cpe-periwinkle': '#c3c3d2',
+        'cpe-dark-blue-darker': '#0d1729',
+        'cpe-dark-blue-lighter': '#24356e',
+        'cpe-blue-gray': '#3b537a',
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
 
