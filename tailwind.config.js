@@ -11,8 +11,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        transparent: 'transparent',
-        current: 'currentColor',
         'cpe-indigo': '#101320',
         'cpe-periwinkle': '#c3c3d2',
         'cpe-dark-blue-darker': '#0d1729',
