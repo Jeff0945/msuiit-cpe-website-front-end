@@ -53,6 +53,7 @@
 <style>
 .router-link-active {
   color: #3b537a;
+  font-weight: bold;
 }
 </style>
 

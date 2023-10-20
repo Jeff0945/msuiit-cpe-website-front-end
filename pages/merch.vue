@@ -5,85 +5,54 @@
       <h2 class="sr-only">Products</h2>
 
       <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-        <a v-for="product in products" :key="product.id" class="group hover:cursor-pointer" @click="toggleModal">
+        <a v-if="!merch" class="group" v-for="i in 6">
+          <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"/>
+          <h3 class="mt-4 text-sm text-gray-200 bg-gray-200 rounded-lg w-1/2">-</h3>
+          <p class="mt-1 text-lg font-medium text-gray-200 bg-gray-200 rounded-lg w-1/4">P</p>
+        </a>
+        <a v-if="merch" v-for="merchItem in merch" :key="merchItem.id" class="group hover:cursor-pointer" @click="toggleModal(merchItem.id)">
           <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-            <img :src="product.imageSrc" :alt="product.imageAlt" class="h-full w-full object-cover object-center group-hover:opacity-75" />
+            <img :src="merchItem.image" :alt="merchItem.imageAlt" class="h-full w-full object-cover object-center group-hover:opacity-75" />
           </div>
-          <h3 class="mt-4 text-sm text-gray-700">{{ product.name }}</h3>
-          <p class="mt-1 text-lg font-medium text-gray-900">₱{{ product.price }}</p>
+          <h3 class="mt-4 text-sm text-gray-700">{{ merchItem.name }}</h3>
+          <p class="mt-1 text-lg font-medium text-gray-900">₱{{ merchItem.price }}</p>
         </a>
       </div>
     </div>
   </div>
-  <MerchModal :open="open" @toggleModal="modalStatus" />
+  <MerchModal :merch-id="merchId" :open="open" @toggleModal="modalStatus" />
 </template>
 
 <script setup>
 import MerchModal from "~/components/merch-modal.vue";
+import { ref, onMounted } from "vue";
+
+const { $apiFetch } = useNuxtApp()
 
 const title = useState('title')
 
 const open = ref(false)
 
-function toggleModal() {
+function toggleModal(key) {
+  merchId.value = key
   open.value = !open.value
 }
 
 function modalStatus(data) {
   open.value = data
-  console.log(data)
 }
 
-const products = [
-  {
-    id: 1,
-    name: 'Earthen Bottle',
-    price: '$48',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-    imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
-  },
-  {
-    id: 2,
-    name: 'Nomad Tumbler',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-    imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
-  },
-  {
-    id: 3,
-    name: 'Focus Paper Refill',
-    price: '$89',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
-    imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-  },
-  {
-    id: 4,
-    name: 'Machined Mechanical Pencil',
-    price: '$35',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-  },
-  // More products...
-]
+const merch = ref(null)
+const merchId = ref(null)
+
+const fetchMerches = async () => {
+  try {
+    merch.value = (await $apiFetch('/merch')).data
+  } catch (error) {}
+}
+
+onMounted(() => {
+  fetchMerches()
+})
+
 </script>

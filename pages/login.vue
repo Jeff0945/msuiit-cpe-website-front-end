@@ -1,27 +1,6 @@
-<!--
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 <template>
-  <!--
-    This example requires updating your template:
-
-    ```
-    <html class="h-full bg-white">
-    <body class="h-full">
-    ```
-  -->
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+    <Title>Login | {{ title }}</Title>
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-28 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="Your Company" />
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
@@ -54,10 +33,14 @@
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        Not a member?
+        Don't have an account?
         {{ ' ' }}
         <a href="#" class="font-semibold leading-6 text-cpe-dark-blue-lighter hover:text-cpe-blue-gray">Register now</a>
       </p>
     </div>
   </div>
 </template>
+
+<script setup>
+const title = useState('title')
+</script>
