@@ -17,7 +17,7 @@
 
                 <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                   <div :class="`${merch ? '' : 'animate-pulse'} aspect-h-3 aspect-w-2 overflow-hidden rounded-lg sm:col-span-4 lg:col-span-5 ${merch ? 'bg-gray-100' : 'bg-gray-200'}`">
-                    <img v-if="merch" @load="loaded" :src="merch.image" :alt="merch.imageAlt" :style="'opacity: ' + opacity" class="object-cover object-center" />
+                    <img v-if="merch" @load="loaded" :src="merch.imageSrc" :alt="merch.imageAlt" :style="'opacity: ' + opacity" class="object-cover object-center" />
                   </div>
                   <div class="sm:col-span-8 lg:col-span-7">
                     <h2 v-if="merch" class="text-2xl font-bold text-gray-900 sm:pr-12">{{ merch.name }}</h2>
@@ -172,7 +172,7 @@ function closeModal() {
 
 function colorClick(id) {
   const selColor = merch.value.colors.filter(o => o.id === id)[0];
-  merch.value.image = selColor.imageSrc
+  merch.value.imageSrc = selColor.imageSrc
   merch.value.imageAlt = selColor.imageAlt
   opacity.value = 0.50
 }
