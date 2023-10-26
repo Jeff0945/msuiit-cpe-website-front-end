@@ -16,18 +16,18 @@
                 </button>
 
                 <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-                  <div :class="`aspect-h-3 aspect-w-2 overflow-hidden rounded-lg sm:col-span-4 lg:col-span-5 ${merch ? 'bg-gray-100' : 'bg-gray-200'}`">
+                  <div :class="`${merch ? '' : 'animate-pulse'} aspect-h-3 aspect-w-2 overflow-hidden rounded-lg sm:col-span-4 lg:col-span-5 ${merch ? 'bg-gray-100' : 'bg-gray-200'}`">
                     <img v-if="merch" @load="loaded" :src="merch.image" :alt="merch.imageAlt" :style="'opacity: ' + opacity" class="object-cover object-center" />
                   </div>
                   <div class="sm:col-span-8 lg:col-span-7">
                     <h2 v-if="merch" class="text-2xl font-bold text-gray-900 sm:pr-12">{{ merch.name }}</h2>
-                    <h2 v-if="!merch" class="text-2xl font-bold text-gray-200 bg-gray-200 sm:pr-12 w-3/4 rounded">-</h2>
+                    <h2 v-else class="animate-pulse text-2xl font-bold text-gray-200 bg-gray-200 sm:pr-12 w-3/4 rounded">-</h2>
 
                     <section aria-labelledby="information-heading" class="mt-2">
                       <h3 id="information-heading" class="sr-only">Product information</h3>
 
                       <p v-if="merch" class="text-2xl text-gray-900">₱{{ merch.price }}</p>
-                      <p v-if="!merch" class="text-2xl text-gray-200 bg-gray-200 w-1/4 rounded">₱</p>
+                      <p v-else class="animate-pulse text-2xl text-gray-200 bg-gray-200 w-1/4 rounded">₱</p>
                     </section>
 
                     <section aria-labelledby="options-heading" class="mt-10">
@@ -50,7 +50,7 @@
                             </span>
                           </RadioGroup>
                         </div>
-                        <div v-if="!merch" class="bg-gray-200 rounded">
+                        <div v-else class="bg-gray-200 animate-pulse rounded">
                           <h4 class="text-sm font-medium text-gray-200 cursor-default">-</h4>
 
                           <RadioGroup v-model="selectedColor" class="mt-4">
@@ -91,7 +91,7 @@
                           </RadioGroup>
                         </div>
 
-                        <div v-if="!merch" class="mt-10 bg-gray-200 rounded">
+                        <div v-else class="animate-pulse mt-10 bg-gray-200 rounded">
                           <div class="flex items-center justify-between">
                             <h4 class="text-sm font-medium text-gray-200 cursor-default">Size</h4>
                             <a href="#" class="text-sm font-medium text-gray-200 cursor-default">Size guide</a>
@@ -115,8 +115,8 @@
                           </RadioGroup>
                         </div>
 
-                        <ButtonSpinner v-if="!merch" :text="'Loading'" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-200 px-8 py-3 text-base font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
-                        <ButtonSpinner v-if="merch" @click="load" :text="'Add to bag'" :loading="loading" type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-cpe-dark-blue-lighter px-8 py-3 text-base font-medium text-white hover:bg-cpe-blue-gray focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
+                        <ButtonSpinner v-if="!merch" :text="'Loading'" class="animate-pulse mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-200 px-8 py-3 text-base font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
+                        <ButtonSpinner v-else @click="load" :text="'Add to bag'" :loading="loading" type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-cpe-dark-blue-lighter px-8 py-3 text-base font-medium text-white hover:bg-cpe-blue-gray focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
                       </form>
                     </section>
                   </div>

@@ -5,7 +5,7 @@
       <div class="flex lg:flex-1">
         <a href="#" class="-m-1.5 p-1.5">
           <span class="sr-only">{{ title }}</span>
-          <img class="h-16 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="" />
+          <img class="h-16 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="ICpEP.SE Logo" />
         </a>
       </div>
       <div class="flex lg:hidden">
