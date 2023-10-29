@@ -18,7 +18,7 @@
         <NuxtLink v-for="link in links" :to="link.link" class="text-lg font-semibold leading-6 text-gray-900">{{ link.name }}</NuxtLink>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <NuxtLink to="/login" class="text-lg font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></NuxtLink>
+        <NuxtLink to="/sign-in" class="text-lg font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></NuxtLink>
       </div>
     </nav>
     <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
@@ -40,7 +40,7 @@
               <NuxtLink @click="mobileMenuOpen = false" v-for="link in links" :to="link.link" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ link.name }}</NuxtLink>
             </div>
             <div class="py-6">
-              <NuxtLink @click="mobileMenuOpen = false" to="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</NuxtLink>
+              <NuxtLink @click="mobileMenuOpen = false" to="/sign-in" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</NuxtLink>
             </div>
           </div>
         </div>

@@ -16,8 +16,16 @@ export default {
         'cpe-dark-blue-darker': '#0d1729',
         'cpe-dark-blue-lighter': '#24356e',
         'cpe-blue-gray': '#3b537a',
-      }
+      },
     },
+    fontFamily: {
+      sans: [
+        '"Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        {
+          fontFeatureSettings: '"cv02", "cv03", "cv04", "cv11"'
+        }
+      ]
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),
