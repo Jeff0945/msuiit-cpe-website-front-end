@@ -5426,6 +5426,11 @@ vue-router@^4.1.0, vue-router@^4.2.5:
   dependencies:
     "@vue/devtools-api" "^6.5.0"
 
+vue-sonner@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.npmjs.org/vue-sonner/-/vue-sonner-0.4.4.tgz"
+  integrity sha512-Cu8IqjpZF+B7KWu0FHkNTWpTuufn92S0s2c3YuCUG4dL4KNWvAv0Ox+TPWN525gJ1mijG2UUIccEx0lVNga58A==
+
 "vue@^2.7.0 || ^3.2.25", vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.3.4, "vue@>= 3", "vue@>=2.7 || >=3", vue@3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"

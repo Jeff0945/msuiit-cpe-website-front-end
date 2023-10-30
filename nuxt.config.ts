@@ -25,4 +25,7 @@ export default defineNuxtConfig({
       API_URL: process.env.API_URL,
     },
   },
+  build: {
+      transpile: ['vue-sonner']
+  }
 })
