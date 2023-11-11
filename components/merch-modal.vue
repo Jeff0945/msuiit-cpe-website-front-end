@@ -17,7 +17,13 @@
 
                 <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                   <div :class="`${merch ? '' : 'animate-pulse'} aspect-h-3 aspect-w-2 overflow-hidden rounded-lg sm:col-span-4 lg:col-span-5 ${merch ? 'bg-gray-100' : 'bg-gray-200'}`">
-                    <img v-if="merch" @load="loaded" :src="merch.imageSrc" :alt="merch.imageAlt" :style="'opacity: ' + opacity" class="object-cover object-center" />
+                    <img v-if="merch" @load="isImgLoading = false" :src="merch.imageSrc" :alt="merch.imageAlt" :style="'opacity: ' + opacity" class="object-cover object-center" />
+                    <div v-if="isImgLoading" class="flex items-center justify-center bg-black bg-opacity-30">
+                      <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
                   </div>
                   <div class="sm:col-span-8 lg:col-span-7">
                     <h2 v-if="merch" class="text-2xl font-bold text-gray-900 sm:pr-12">{{ merch.name }}</h2>
@@ -77,9 +83,9 @@
                             <RadioGroupLabel class="sr-only">Choose a size</RadioGroupLabel>
                             <div class="grid grid-cols-4 gap-4">
                               <RadioGroupOption v-if="merch" as="template" v-for="size in (<Merch>merch).sizes" :key="size.name" :value="size" :disabled="!size.isAvailable" v-slot="{ active, checked }">
-                                <div :class="[size.isAvailable ? 'cursor-pointer bg-white text-gray-900 shadow-sm' : 'cursor-not-allowed bg-gray-50 text-gray-200', active ? 'ring-2 ring-cpe-dark-blue-lighter' : '', 'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1']">
+                                <div :class="[size.isAvailable ? 'cursor-pointer bg-white text-gray-900 shadow-sm' : 'cursor-not-allowed bg-gray-50 text-gray-200', 'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1']">
                                   <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
-                                  <span v-if="size.isAvailable" :class="[active ? 'border' : 'border-2', checked ? 'border-cpe-dark-blue-lighter' : 'border-transparent', 'pointer-events-none absolute -inset-px rounded-md']" aria-hidden="true" />
+                                  <span v-if="size.isAvailable" :style="'border-color:' + selectedColor.color" :class="[checked ? 'border-2 border-accent' : 'border-transparent', 'pointer-events-none absolute -inset-px rounded-md']" aria-hidden="true" />
                                   <span v-else aria-hidden="true" class="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
                                     <svg class="absolute inset-0 h-full w-full stroke-2 text-gray-200" viewBox="0 0 100 100" preserveAspectRatio="none" stroke="currentColor">
                                       <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />
@@ -115,8 +121,8 @@
                           </RadioGroup>
                         </div>
 
-                        <ButtonSpinner v-if="!merch" :text="'Loading'" class="animate-pulse mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-200 px-8 py-3 text-base font-medium text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
-                        <ButtonSpinner v-else @click="load" :text="'Add to bag'" :loading="loading" type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-cpe-dark-blue-lighter px-8 py-3 text-base font-medium text-white hover:bg-cpe-blue-gray focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"></ButtonSpinner>
+                        <ButtonSpinner v-if="!merch" :text="'Loading'" class="animate-pulse mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-200 px-8 py-3 text-base font-medium text-gray-200"></ButtonSpinner>
+                        <ButtonSpinner v-else @click="load" :text="'Add to bag'" :loading="loading" type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-accent px-8 py-3 text-base font-medium text-white hover:bg-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"></ButtonSpinner>
                       </form>
                     </section>
                   </div>
@@ -149,6 +155,7 @@ import ButtonSpinner from "~/components/button-spinner.vue";
 const { $apiFetch } = useNuxtApp()
 const { emit } = getCurrentInstance()
 const loading = ref<boolean>(false)
+const isImgLoading = ref<boolean>(false)
 const merch = ref<Merch>(undefined)
 const selectedColor = ref<MerchColor>(undefined)
 const selectedSize = ref<MerchSize>(undefined)
@@ -176,11 +183,7 @@ function colorClick(id) {
   const selColor = merch.value.colors.filter(o => o.id === id)[0]
   merch.value.imageSrc = selColor.imageSrc
   merch.value.imageAlt = selColor.imageAlt
-  opacity.value = 0.50
-}
-
-function loaded() {
-  opacity.value = 1
+  isImgLoading.value = true
 }
 
 function load() {
