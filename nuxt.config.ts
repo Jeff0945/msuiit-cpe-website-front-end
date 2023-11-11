@@ -1,10 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import dotenv from 'dotenv'
+import { defineNuxtConfig } from "nuxt/config";
+import dotenv from "dotenv"
 dotenv.config()
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
   postcss: {
     plugins: {
         tailwindcss: {},
@@ -14,9 +15,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [{
-        rel: 'icon',
-        type: 'image/jpeg',
-        href: '/img/icpepse-msuiit-logo.jpg'
+        rel: "icon",
+        type: "image/jpeg",
+        href: "/img/icpepse-msuiit-logo.jpg"
       }]
     },
   },
@@ -26,6 +27,9 @@ export default defineNuxtConfig({
     },
   },
   build: {
-      transpile: ['vue-sonner']
-  }
+      transpile: ["vue-sonner"]
+  },
+  modules: [
+      "@pinia/nuxt",
+  ],
 })

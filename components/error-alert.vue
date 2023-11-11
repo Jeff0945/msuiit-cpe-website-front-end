@@ -1,5 +1,5 @@
 <template>
-  <div v-if="error" class="bg-red-50 rounded-md p-4 mb-6" role="alert">
+  <div v-if="error" class="bg-red-50 rounded-md p-4" role="alert">
     <div class="flex">
       <div class="flex-shrink-0">
         <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -19,12 +19,10 @@
   </div>
 </template>
 
-<script setup>
-/*
-* error object:
-*   title: Contains the title of the error as a string
-*   message: Contains the message of the error as a string
-*   messages: Contains the messages of the error as an array
-* */
-defineProps(['error'])
+<script setup lang="ts">
+import { Alert } from "~/types/global";
+
+defineProps({
+  error: { type: Object as () => Alert }
+})
 </script>

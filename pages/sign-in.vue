@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-24 lg:px-8">
     <Title>Sign-in | {{ title }}</Title>
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-28 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="Your Company" />
@@ -7,7 +7,8 @@
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <ErrorAlert :error="error"></ErrorAlert>
+      <ErrorAlert :error="error" class="mb-6"/>
+      <SuccessAlert :success="success" class="mb-6"/>
       <form class="space-y-6" @submit.prevent="signIn" method="POST">
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
@@ -20,7 +21,7 @@
           <div class="flex items-center justify-between">
             <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
             <div class="text-sm">
-              <a href="#" class="font-semibold text-cpe-dark-blue-lighter hover:text-cpe-blue-gray">Forgot password?</a>
+              <a href="#" class="font-semibold text-accent hover:text-primary">Forgot password?</a>
             </div>
           </div>
           <div class="mt-2">
@@ -29,30 +30,35 @@
         </div>
 
         <div>
-          <ButtonSpinner type="submit" :isLoading="isLoading" :text="'Sign in'" class="flex w-full justify-center rounded-md bg-cpe-dark-blue-lighter px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cpe-blue-gray focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"></ButtonSpinner>
+          <ButtonSpinner type="submit" :isLoading="isLoading" :text="'Sign in'" class="flex w-full justify-center rounded-md bg-accent px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"></ButtonSpinner>
         </div>
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
         Don't have an account?
-        {{ ' ' }}
-        <NuxtLink to="/sign-up" class="font-semibold leading-6 text-cpe-dark-blue-lighter hover:text-cpe-blue-gray">Sign up now</NuxtLink>
+        {{ " " }}
+        <NuxtLink to="/sign-up" class="font-semibold leading-6 text-accent hover:text-primary">Sign up now</NuxtLink>
       </p>
     </div>
   </div>
 </template>
 
-<script setup>
-import ErrorAlert from "~/components/error-alert.vue";
+<script setup lang="ts">
+import { useAuthStore } from "~/store/auth";
+import { Alert } from "~/types/global";
+
+definePageMeta({
+  middleware: ["guest"]
+})
 
 const { $apiFetch } = useNuxtApp()
-
-const title = useState('title')
-const isLoading = ref(false)
-const email = ref('')
-const password = ref('')
-
-const error = ref(null)
+const authStore = useAuthStore()
+const title = useState("title")
+const isLoading = ref<boolean>(false)
+const email = ref<string>("")
+const password = ref<string>("")
+const error = ref<Alert>(undefined)
+const success = ref<Alert>(undefined)
 
 /**
  * Signs in the user asynchronously.
@@ -64,18 +70,27 @@ async function signIn() {
   error.value = null
 
   try {
-    await $apiFetch('/sign-in', {
-      method: 'POST',
+    const response = await $apiFetch("/sign-in", {
+      method: "POST",
       body: {
         email: email.value,
         password: password.value
       },
     })
+
+    authStore.setUser(response.user)
+    authStore.setToken(response.token)
+
+    success.value = <Alert>{
+      title: "Signed in successfully"
+    }
+
+    navigateTo("/")
   } catch (e) {
     handleError(e.data)
-  }
 
-  isLoading.value = false
+    isLoading.value = false
+  }
 }
 
 /**
@@ -85,10 +100,10 @@ async function signIn() {
  * @return {void} This function does not return a value.
  */
 function handleError(e) {
-  const errorResponse = { title: 'Authentication failed' }
+  const errorResponse = <Alert>{ title: "Authentication failed" }
 
-  if (e.error) {
-    errorResponse.message = 'Please check your email and password and try again.'
+  if (e.message) {
+    errorResponse.message = "Please check your email and password and try again."
   } else if (e.errors) {
     errorResponse.messages = Object.values(e.errors).flat()
   }

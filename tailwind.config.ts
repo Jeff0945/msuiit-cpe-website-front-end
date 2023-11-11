@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
+
 export default {
   content: [
     "./components/**/*.{js,vue,ts}",
@@ -11,11 +12,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'cpe-indigo': '#101320',
-        'cpe-periwinkle': '#c3c3d2',
-        'cpe-dark-blue-darker': '#0d1729',
-        'cpe-dark-blue-lighter': '#24356e',
-        'cpe-blue-gray': '#3b537a',
+        "cpe-indigo": "#101320",
+        "cpe-periwinkle": "#c3c3d2",
+        "cpe-dark-blue-darker": "#0d1729",
+        "cpe-dark-blue-lighter": "#24356e",
+        "cpe-blue-gray": "#3b537a",
+        "primary": "#222f53",
+        "secondary": "#ccd4ea",
+        "accent": "#445ea7",
       },
     },
     fontFamily: {
@@ -28,8 +32,8 @@ export default {
     }
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
   ],
 }
 

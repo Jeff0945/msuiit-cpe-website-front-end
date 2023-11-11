@@ -1,4 +1,5 @@
 <template>
+  <HomepageHeader/>
   <div class="bg-white py-24 sm:py-32">
     <Title>About Us | {{ title }}</Title>
     <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
@@ -12,7 +13,7 @@
             <img class="h-16 w-16 rounded-full" :src="person.imageUrl" alt="" />
             <div>
               <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">{{ person.name }}</h3>
-              <p class="text-sm font-semibold leading-6 text-cpe-blue-gray">{{ person.role }}</p>
+              <p class="text-sm font-semibold leading-6 text-accent">{{ person.role }}</p>
             </div>
           </div>
         </li>
@@ -21,45 +22,45 @@
   </div>
 </template>
 
-<script setup>
-const title = useState('title')
+<script setup lang="ts">
+const title = useState("title")
 
 const people = [
   {
-    name: 'Rhenelly Adorable',
-    role: 'Co-Founder / CEO',
+    name: "Rhenelly Adorable",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Karl Vacalares',
-    role: 'Co-Founder / CEO',
+    name: "Karl Vacalares",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Ian James Cruza',
-    role: 'Co-Founder / CEO',
+    name: "Ian James Cruza",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Tristan Jadman',
-    role: 'Co-Founder / CEO',
+    name: "Tristan Jadman",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Alney Rose Corda',
-    role: 'Co-Founder / CEO',
+    name: "Alney Rose Corda",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Janna Joyce Jumao-as',
-    role: 'Co-Founder / CEO',
+    name: "Janna Joyce Jumao-as",
+    role: "Co-Founder / CEO",
     imageUrl:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   // More people...
 ]

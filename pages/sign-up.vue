@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-24 lg:px-8">
     <Title>Sign up | {{ title }}</Title>
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-28 w-auto" src="/img/icpepse-msuiit-logo.jpg" alt="Your Company" />
@@ -7,7 +7,8 @@
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <ErrorAlert :error="error"></ErrorAlert>
+      <ErrorAlert :error="error" class="mb-6"/>
+      <SuccessAlert :success="success" class="mb-6"/>
       <form class="space-y-6" action="#" method="POST" @submit.prevent="signUp">
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
@@ -57,48 +58,55 @@
         </div>
 
         <div>
-          <ButtonSpinner type="submit" :isLoading="isLoading" :text="'Sign up'" class="flex w-full justify-center rounded-md bg-cpe-dark-blue-lighter px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cpe-blue-gray focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"></ButtonSpinner>
+          <ButtonSpinner type="submit" :isLoading="isLoading" :text="'Sign up'" class="flex w-full justify-center rounded-md bg-accent px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"></ButtonSpinner>
         </div>
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
         Already have an account?
-        {{ ' ' }}
-        <NuxtLink to="/sign-in" class="font-semibold leading-6 text-cpe-dark-blue-lighter hover:text-cpe-blue-gray">Sign <in></in> here</NuxtLink>
+        {{ " " }}
+        <NuxtLink to="/sign-in" class="font-semibold leading-6 text-accent hover:text-primary">Sign in here</NuxtLink>
       </p>
     </div>
   </div>
 </template>
 
-<script setup>
-const title = useState('title')
+<script setup lang="ts">
+import { useAuthStore } from "~/store/auth";
+import { Alert } from "~/types/global";
+
+definePageMeta({
+  middleware: ["guest"]
+})
+
+const title = useState("title")
 const { $apiFetch } = useNuxtApp()
+const authStore = useAuthStore()
 
-const firstName = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-
-const confirmPasswordError = ref('')
-const error = ref(null)
-
-const isLoading = ref(false)
+const firstName = ref<string>("")
+const middleName = ref<string>("")
+const lastName = ref<string>("")
+const email = ref<string>("")
+const password = ref<string>("")
+const confirmPassword = ref<string>("")
+const confirmPasswordError = ref<string>("")
+const error = ref<Alert>(undefined)
+const success = ref<Alert>(undefined)
+const isLoading = ref<boolean>(false)
 
 async function signUp() {
   isLoading.value = true
   error.value = null
 
   if (password.value !== confirmPassword.value) {
-    error.value = {
-      title: 'Validation failed',
-      message: 'Password does not match'
+    error.value = <Alert>{
+      title: "Validation failed",
+      message: "Password does not match."
     }
   } else {
     try {
-      const response = await $apiFetch('/sign-up', {
-        method: 'POST',
+      const response = await $apiFetch("/sign-up", {
+        method: "POST",
         body: {
           firstName: firstName.value,
           middleName: middleName.value,
@@ -109,13 +117,20 @@ async function signUp() {
         }
       })
 
-      console.log(response)
+      authStore.setUser(response.user)
+      authStore.setToken(response.token)
+
+      success.value = <Alert>{
+        title: "Account created",
+      }
+
+      navigateTo("/personal-info")
     } catch (e) {
       handleError(e.data)
+
+      isLoading.value = false
     }
   }
-
-  isLoading.value = false
 }
 
 /**
@@ -125,10 +140,10 @@ async function signUp() {
  * @return {void} This function does not return a value.
  */
 function handleError(e) {
-  const errorResponse = { title: 'Unable to create account' }
+  const errorResponse = <Alert>{ title: "Unable to create account" }
 
-  if (e.error) {
-    errorResponse.message = 'Please check your email and password and try again.'
+  if (e.message) {
+    errorResponse.message = "Please check your email and password and try again."
   } else if (e.errors) {
     errorResponse.messages = Object.values(e.errors).flat()
   }

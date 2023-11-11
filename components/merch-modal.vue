@@ -43,7 +43,7 @@
                             <span class="flex items-center space-x-3">
                               <RadioGroupOption as="template" v-for="color in merch.colors" :key="color.id" :value="color" v-slot="{ active, checked }" @click="colorClick(color.id)">
                                 <div :style="[color.selectedColor ? '--tw-ring-color: ' + color.selectedColor : '']" :class="[active && checked ? 'ring ring-offset-1' : '', !active && checked ? 'ring-2' : '', 'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none']">
-                                  <RadioGroupLabel as="span" class="sr-only">{{ color.name }}</RadioGroupLabel>
+                                  <RadioGroupLabel as="span" class="sr-only">{{ color.imageAlt }}</RadioGroupLabel>
                                   <span :style="[color.color ? 'background-color: ' + color.color : '']" aria-hidden="true" :class="['h-8 w-8 rounded-full border border-black border-opacity-10']" />
                                 </div>
                               </RadioGroupOption>
@@ -76,7 +76,7 @@
                           <RadioGroup v-model="selectedSize" class="mt-4">
                             <RadioGroupLabel class="sr-only">Choose a size</RadioGroupLabel>
                             <div class="grid grid-cols-4 gap-4">
-                              <RadioGroupOption v-if="merch" as="template" v-for="size in merch.sizes" :key="size.name" :value="size" :disabled="!size.isAvailable" v-slot="{ active, checked }">
+                              <RadioGroupOption v-if="merch" as="template" v-for="size in (<Merch>merch).sizes" :key="size.name" :value="size" :disabled="!size.isAvailable" v-slot="{ active, checked }">
                                 <div :class="[size.isAvailable ? 'cursor-pointer bg-white text-gray-900 shadow-sm' : 'cursor-not-allowed bg-gray-50 text-gray-200', active ? 'ring-2 ring-cpe-dark-blue-lighter' : '', 'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1']">
                                   <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
                                   <span v-if="size.isAvailable" :class="[active ? 'border' : 'border-2', checked ? 'border-cpe-dark-blue-lighter' : 'border-transparent', 'pointer-events-none absolute -inset-px rounded-md']" aria-hidden="true" />
@@ -130,8 +130,10 @@
   </TransitionRoot>
 </template>
 
-<script setup>
-import { ref, getCurrentInstance } from 'vue'
+<script setup lang="ts">
+import {Merch, MerchColor, MerchSize} from "~/types/merch"
+import { getCurrentInstance } from "vue"
+import { useNuxtApp } from "#app";
 import {
   Dialog,
   DialogPanel,
@@ -140,25 +142,25 @@ import {
   RadioGroupOption,
   TransitionChild,
   TransitionRoot,
-} from '@headlessui/vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
+} from "@headlessui/vue"
+import { XMarkIcon } from "@heroicons/vue/24/outline"
 import ButtonSpinner from "~/components/button-spinner.vue";
 
-const { $apiFetch } = useNuxtApp();
-
+const { $apiFetch } = useNuxtApp()
 const { emit } = getCurrentInstance()
-
-const loading = ref(false)
-const merch = ref(null)
-const selectedColor = ref(null)
-const selectedSize = ref(null)
-const opacity = ref(1)
-
-const props = defineProps(['open', 'merchId'])
+const loading = ref<boolean>(false)
+const merch = ref<Merch>(undefined)
+const selectedColor = ref<MerchColor>(undefined)
+const selectedSize = ref<MerchSize>(undefined)
+const opacity = ref<number>(1)
+const props = defineProps({
+  open: { type: Boolean },
+  merchId: { type: Number }
+})
 
 watch(() => props.merchId, async (id) => {
   if (props.merchId) {
-    merch.value = null
+    merch.value = undefined
     merch.value = (await $apiFetch(`/merch/${id}`)).data
     selectedColor.value = merch.value.colors[0]
   }
@@ -166,12 +168,12 @@ watch(() => props.merchId, async (id) => {
 
 function closeModal() {
   open.value = false
-  emit('toggleModal', open.value)
+  emit("toggleModal", open.value)
   loading.value = false
 }
 
 function colorClick(id) {
-  const selColor = merch.value.colors.filter(o => o.id === id)[0];
+  const selColor = merch.value.colors.filter(o => o.id === id)[0]
   merch.value.imageSrc = selColor.imageSrc
   merch.value.imageAlt = selColor.imageAlt
   opacity.value = 0.50

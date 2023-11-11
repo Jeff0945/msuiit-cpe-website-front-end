@@ -1,4 +1,5 @@
 <template>
+  <HomepageHeader/>
   <div class="bg-white">
     <Title>Merch | {{ title }}</Title>
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -23,15 +24,18 @@
   <MerchModal :merch-id="merchId" :open="open" @toggleModal="modalStatus" />
 </template>
 
-<script setup>
-import MerchModal from "~/components/merch-modal.vue";
-import { ref, onMounted } from "vue";
+<script setup lang="ts">
+import { Merch } from "~/types/merch";
 
 const { $apiFetch } = useNuxtApp()
+const title = useState("title")
+const open = ref<boolean>(false)
+const merch = ref<Merch[]>(null)
+const merchId = ref<number>(null)
 
-const title = useState('title')
-
-const open = ref(false)
+onMounted(() => {
+  fetchMerches()
+})
 
 function toggleModal(key) {
   merchId.value = key
@@ -42,17 +46,9 @@ function modalStatus(data) {
   open.value = data
 }
 
-const merch = ref(null)
-const merchId = ref(null)
-
-const fetchMerches = async () => {
+async function fetchMerches() {
   try {
-    merch.value = (await $apiFetch('/merch')).data
+    merch.value = (await $apiFetch("/merch")).data
   } catch (error) {}
 }
-
-onMounted(() => {
-  fetchMerches()
-})
-
 </script>
